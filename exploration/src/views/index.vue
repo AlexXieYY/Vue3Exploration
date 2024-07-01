@@ -22,7 +22,7 @@
                 <el-col :span="6">
                     <div class="grid-content bg-purple">
                         <router-link to="/test">
-                            <button style="background-color: #eee09a">test</button>
+                            <button style="background-color: #eee09a">project2</button>
                         </router-link>
                     </div>
                 </el-col>
@@ -43,12 +43,35 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { defineComponent } from 'vue';
+<script lang="ts" setup>
+    import { ref, onMounted } from 'vue';
+    import axios from 'axios'
 
-    export default defineComponent({
-        name: 'Index'
+    // 定义数据类型
+    interface DataItem {
+        id: number;
+        name: string;
+    }
+
+    // 创建一个响应式变量存储数据
+    const data = ref<DataItem[]>([]);
+
+    // 定义获取数据的函数
+    const fetchData = async () => {
+        try {
+            const response = await axios.get<DataItem[]>('http://localhost:3000/api/data');
+            // data.value = response.data;
+            console.log(response.data)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    // 在组件挂载时调用fetchData函数
+    onMounted(() => {
+        fetchData();
     });
+
 </script>
 
 <style lang="scss" scoped>
@@ -82,7 +105,8 @@
   .mainCol{
     height: 90%;
     margin: 10px;
-    background-color: #efafad;
+    //background-color: #efafad;
+    background-color: white;
     width: 90%;
     border-radius: 20px;
   }
